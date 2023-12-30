@@ -1,7 +1,29 @@
 window.addEventListener("load", function () {
+    function handleKey(key) {
+        // 处理按键逻辑
+        console.log(`Key pressed: ${key}`);
 
+        // 处理特殊按键逻辑
+        if (key === 'BACKSPACE') {
+            handleBackspace();
+            console.log("Backspace pressed");
+        } else if (key === 'ENTER') {
+
+
+            console.log("Enter pressed");
+        } else if (key === 'NEW GAME') {
+            console.log("New Game pressed");
+        } else if (currentGuess.length < 6 && key !== 'Enter') {
+            // 添加字符到当前猜测
+            currentGuess.push(key);
+            console.log(currentGuess);
+        }
+        updateCurrentGuess();
+    }
     // 获取所有按钮元素
     const buttons = document.querySelectorAll('button');
+
+
 
     // 添加按钮点击事件监听器
     buttons.forEach(button => {
@@ -15,6 +37,67 @@ window.addEventListener("load", function () {
         });
     });
 
+    // 添加物理键盘事件监听器
+    document.addEventListener('keydown', function (event) {
+        const key = event.key.toUpperCase();
+
+        const physicalKeyValue = event.key;
+        const correspondingVirtualKey = getCorrespondingVirtualKey(physicalKeyValue);
+        if (correspondingVirtualKey) {
+            // console.log(correspondingVirtualKey); // 在控制台打印大写键值
+            addVisualIndication(correspondingVirtualKey);
+        }
+
+        if ((key >= 'A' && key <= 'Z') || key === 'ENTER' || key === 'BACKSPACE' || key === 'ESCAPE') {
+            handleKey(key);
+
+            // 添加可视化指示
+            const matchingButton = Array.from(buttons).find(button => button.innerText === key);
+            if (matchingButton) {
+                matchingButton.classList.add('active');
+                setTimeout(() => {
+                    matchingButton.classList.remove('active');
+                }, 200);
+            }
+        }
+    });
+
+
+    function getCorrespondingVirtualKey(physicalKeyValue) {
+        return physicalKeyValue; //全部大写
+    }
+
+
+    function addVisualIndication(keyValue) {
+        // 选择具有特定数据属性的元素
+        const keyElement = document.querySelector(`[data-key="${keyValue}"]`);
+
+
+        // 检查元素是否存在
+        if (keyElement) {
+            // 定义颜色常量
+            const indicationColor = "#256"; // 可以根据需要调整颜色
+
+            // console.log("Element found:", keyElement); // 添加这一行控制台检查
+
+            // 添加视觉指示
+            keyElement.style.backgroundColor = indicationColor;
+
+            // 在200毫秒后恢复背景颜色
+            setTimeout(() => {
+                // 在闭包中使用 keyElement
+                keyElement.style.backgroundColor = "";
+            }, 200);
+        } else {
+            console.error(`Can NOT find ${keyValue} element`);
+        }
+    }
+
+
+
+
+
+
 
     let currentGuess = [];
     // 初始化目标单词
@@ -23,7 +106,6 @@ window.addEventListener("load", function () {
     // 更新Enter按钮状态
     updateEnterButton();
 
-    // 添加Enter按钮点击事件监听器
 
 
     // 获取目标单词
@@ -65,27 +147,7 @@ window.addEventListener("load", function () {
     // 调用获取目标单词的函数
     getTargetWord();
 
-    function handleKey(key) {
-        // 处理按键逻辑
-        console.log(`Key pressed: ${key}`);
 
-        // 处理特殊按键逻辑
-        if (key === 'BACKSPACE') {
-            handleBackspace();
-            console.log("Backspace pressed");
-        } else if (key === 'ENTER') {
-
-
-            console.log("Enter pressed");
-        } else if (key === 'NEW GAME') {
-            console.log("New Game pressed");
-        } else if (currentGuess.length < 6 && key !== 'Enter') {
-            // 添加字符到当前猜测
-            currentGuess.push(key);
-            console.log(currentGuess);
-        }
-        updateCurrentGuess();
-    }
 
 
     function handleBackspace() {
@@ -100,23 +162,7 @@ window.addEventListener("load", function () {
     }
 
 
-    // 添加物理键盘事件监听器
-    document.addEventListener('keydown', function (event) {
-        const key = event.key.toUpperCase();
 
-        if ((key >= 'A' && key <= 'Z') || key === 'ENTER' || key === 'BACKSPACE' || key === 'ESCAPE') {
-            handleKey(key);
-
-            // 添加可视化指示
-            const matchingButton = Array.from(buttons).find(button => button.innerText === key);
-            if (matchingButton) {
-                matchingButton.classList.add('active');
-                setTimeout(() => {
-                    matchingButton.classList.remove('active');
-                }, 200);
-            }
-        }
-    });
 
 
 
