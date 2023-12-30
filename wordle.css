@@ -11,3 +11,24 @@ button {
     margin: 5px;
     font-size: 16px;
 }
+
+
+
+
+.guess-char {
+    display: inline-flex;
+    width: 70px;
+    height: 80px;
+    border: 1px #000 solid;
+    background-color: aquamarine;
+    margin: 1px;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+}
+
+.guess-row {
+    display: flex;
+    justify-content: center;
+    margin: 1px auto;
+}
