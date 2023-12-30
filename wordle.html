@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Game</title>
+    <link rel="stylesheet" href="wordle.css">
+    <script src="wordle.js"></script>
+</head>
+
+<body>
+    <div id="keyboard-container">
+        <div id="row1">
+            <button onclick="handleKey('Q')">Q</button>
+            <button onclick="handleKey('W')">W</button>
+            <button onclick="handleKey('E')">E</button>
+            <button onclick="handleKey('R')">R</button>
+            <button onclick="handleKey('T')">T</button>
+            <button onclick="handleKey('Y')">Y</button>
+            <button onclick="handleKey('U')">U</button>
+            <button onclick="handleKey('I')">I</button>
+            <button onclick="handleKey('O')">O</button>
+            <button onclick="handleKey('P')">P</button>
+        </div>
+        <div id="row2">
+            <button onclick="handleKey('A')">A</button>
+            <button onclick="handleKey('S')">S</button>
+            <button onclick="handleKey('D')">D</button>
+            <button onclick="handleKey('F')">F</button>
+            <button onclick="handleKey('G')">G</button>
+            <button onclick="handleKey('H')">H</button>
+            <button onclick="handleKey('J')">J</button>
+            <button onclick="handleKey('K')">K</button>
+            <button onclick="handleKey('L')">L</button>
+        </div>
+        <div id="row3">
+            <button onclick="handleKey('Z')">Z</button>
+            <button onclick="handleKey('X')">X</button>
+            <button onclick="handleKey('C')">C</button>
+            <button onclick="handleKey('V')">V</button>
+            <button onclick="handleKey('B')">B</button>
+            <button onclick="handleKey('N')">N</button>
+            <button onclick="handleKey('M')">M</button>
+        </div>
+        <div id="row4">
+            <button onclick="handleBackspace()">Backspace</button>
+            <button onclick="handleEnter()">Enter</button>
+            <button onclick="handleNewGame()">New Game</button>
+        </div>
+    </div>
+
+</body>
+
+</html>
