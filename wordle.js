@@ -1,30 +1,31 @@
 window.addEventListener("load", function () {
+    let currentGuess = [];
+
     function handleKey(key) {
         // 处理按键逻辑
-        console.log(`Key pressed: ${key}`);
+        // console.log(`Key pressed: ${key}`);
 
         // 处理特殊按键逻辑
         if (key === 'BACKSPACE') {
             handleBackspace();
-            console.log("Backspace pressed");
+            // console.log("Backspace pressed");
         } else if (key === 'ENTER') {
 
 
             console.log("Enter pressed");
         } else if (key === 'NEW GAME') {
             console.log("New Game pressed");
-        } else if (currentGuess.length < 6 && key !== 'Enter') {
+        } else if (currentGuess.length < 6 && (key >= 'A' && key <= 'Z')) {
             // 添加字符到当前猜测
             currentGuess.push(key);
+
             console.log(currentGuess);
         }
         updateCurrentGuess();
     }
+
     // 获取所有按钮元素
     const buttons = document.querySelectorAll('button');
-
-
-
     // 添加按钮点击事件监听器
     buttons.forEach(button => {
         button.addEventListener('click', function () {
@@ -44,21 +45,11 @@ window.addEventListener("load", function () {
         const physicalKeyValue = event.key;
         const correspondingVirtualKey = getCorrespondingVirtualKey(physicalKeyValue);
         if (correspondingVirtualKey) {
-            // console.log(correspondingVirtualKey); // 在控制台打印大写键值
             addVisualIndication(correspondingVirtualKey);
         }
 
         if ((key >= 'A' && key <= 'Z') || key === 'ENTER' || key === 'BACKSPACE' || key === 'ESCAPE') {
             handleKey(key);
-
-            // 添加可视化指示
-            const matchingButton = Array.from(buttons).find(button => button.innerText === key);
-            if (matchingButton) {
-                matchingButton.classList.add('active');
-                setTimeout(() => {
-                    matchingButton.classList.remove('active');
-                }, 200);
-            }
         }
     });
 
@@ -99,7 +90,7 @@ window.addEventListener("load", function () {
 
 
 
-    let currentGuess = [];
+
     // 初始化目标单词
     let targetWord = "";
 
@@ -134,6 +125,7 @@ window.addEventListener("load", function () {
     function updateEnterButton() {
         const enterButton = document.getElementById("enterButton");
         if (targetWord === "") {
+
             // 如果目标单词未选择，禁用Enter按钮
             enterButton.disabled = true;
             enterButton.classList.add('disabled');
