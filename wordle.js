@@ -1,5 +1,6 @@
 window.addEventListener("load", function () {
     let currentGuess = [];
+    let playerGuesses = [];
 
     function handleKey(key) {
         // 处理按键逻辑
@@ -10,8 +11,9 @@ window.addEventListener("load", function () {
             handleBackspace();
             // console.log("Backspace pressed");
         } else if (key === 'ENTER') {
-
             submitGuess();
+            playerGuesses.push(currentGuess);
+            currentGuess = [];
             console.log("Enter pressed");
         } else if (key === 'NEW GAME') {
             console.log("New Game pressed");
@@ -146,12 +148,13 @@ window.addEventListener("load", function () {
     }
 
     function updateCurrentGuess() {
-        let rowIndex = 1;
+        let rowIndex = playerGuesses.length + 1;
         const currentGuessDisplay = document.getElementById("guess-row" + rowIndex);
         const charList = currentGuessDisplay.querySelectorAll(".guess-char");
         charList.forEach((charEle, index) => {
             charEle.innerText = currentGuess[index] || "";
         })
+
     }
 
     let guesses = []; // 存储玩家猜测的数组
@@ -195,5 +198,6 @@ window.addEventListener("load", function () {
             guessArea.classList.remove('shake-animation');
         }, 300); // 500毫秒是动画持续时间
     }
+
 
 })
