@@ -11,14 +11,14 @@ window.addEventListener("load", function () {
             // console.log("Backspace pressed");
         } else if (key === 'ENTER') {
 
-
+            submitGuess();
             console.log("Enter pressed");
         } else if (key === 'NEW GAME') {
             console.log("New Game pressed");
         } else if (currentGuess.length < 6 && (key >= 'A' && key <= 'Z')) {
             // 添加字符到当前猜测
             currentGuess.push(key);
-
+            updateEnterButton();
             console.log(currentGuess);
         }
         updateCurrentGuess();
@@ -48,8 +48,7 @@ window.addEventListener("load", function () {
             addVisualIndication(correspondingVirtualKey);
         }
 
-        if ((key.length == 1 && key >= 'A' && key <= 'Z') || key === 'ENTER' || key === 'BACKSPACE' || key === 'ESCAPE') {
-            console.log("key", event)
+        if ((key.length === 1 && key >= 'A' && key <= 'Z') || key === 'ENTER' || key === 'BACKSPACE' || key === 'ESCAPE') {
             handleKey(key);
         }
     });
@@ -86,12 +85,6 @@ window.addEventListener("load", function () {
     }
 
 
-
-
-
-
-
-
     // 初始化目标单词
     let targetWord = "";
 
@@ -99,7 +92,7 @@ window.addEventListener("load", function () {
     updateEnterButton();
 
 
-
+    getTargetWord();
     // 获取目标单词
     async function getTargetWord() {
         try {
@@ -125,7 +118,7 @@ window.addEventListener("load", function () {
     // 更新Enter按钮状态
     function updateEnterButton() {
         const enterButton = document.getElementById("enterButton");
-        if (targetWord === "") {
+        if (targetWord === "" || currentGuess.length != 6) {
 
             // 如果目标单词未选择，禁用Enter按钮
             enterButton.disabled = true;
@@ -138,9 +131,6 @@ window.addEventListener("load", function () {
     }
 
     // 调用获取目标单词的函数
-    getTargetWord();
-
-
 
 
     function handleBackspace() {
@@ -152,12 +142,8 @@ window.addEventListener("load", function () {
 
         // 更新显示的当前猜测
         updateCurrentGuess();
+        updateEnterButton();
     }
-
-
-
-
-
 
     function updateCurrentGuess() {
         let rowIndex = 1;
@@ -166,6 +152,48 @@ window.addEventListener("load", function () {
         charList.forEach((charEle, index) => {
             charEle.innerText = currentGuess[index] || "";
         })
+    }
+
+    let guesses = []; // 存储玩家猜测的数组
+    function submitGuess() {
+        validateGuess(currentGuess).then(isValid => {
+            if (isValid) {
+                console.log('Valid guess:', currentGuess.join(''));
+                guesses.push(currentGuess);
+                currentGuess = '';
+
+            } else {
+                shakeAnimation();
+            }
+        });
+    }
+
+    async function validateGuess(guess) {
+        const guessString = guess.join('');
+        try {
+            const response = await fetch(`https://words.trex-sandwich.com/${guessString}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            console.log("A", guess);
+            const data = await response.json();
+            console.log('Response data:', data); // 用于调试
+            return data.valid;
+        } catch (error) {
+            console.error('Error fetching word validation:', error);
+            return false;
+        }
+    }
+
+    function shakeAnimation() {
+        const guessArea = document.querySelector('#guess-row1'); // 替换为您的猜测显示区域的选择器
+        console.log(guessArea);
+        guessArea.classList.add('shake-animation');
+
+        // 动画完成后移除类，以便将来可以再次触发动画
+        setTimeout(() => {
+            guessArea.classList.remove('shake-animation');
+        }, 300); // 500毫秒是动画持续时间
     }
 
 })
