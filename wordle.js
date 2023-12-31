@@ -1,6 +1,6 @@
 window.addEventListener("load", function () {
     let currentGuess = [];
-    let playerGuesses = [];
+    let guesses = []; // 存储玩家猜测的数组
 
     function handleKey(key) {
         // 处理按键逻辑
@@ -12,7 +12,8 @@ window.addEventListener("load", function () {
             // console.log("Backspace pressed");
         } else if (key === 'ENTER') {
             submitGuess();
-            playerGuesses.push(currentGuess);
+
+            guesses.push(currentGuess);
             currentGuess = [];
             console.log("Enter pressed");
         } else if (key === 'NEW GAME') {
@@ -141,14 +142,11 @@ window.addEventListener("load", function () {
             // 移除最后一个字符
             currentGuess.pop();
         }
-
-        // 更新显示的当前猜测
-        updateCurrentGuess();
         updateEnterButton();
     }
 
     function updateCurrentGuess() {
-        let rowIndex = playerGuesses.length + 1;
+        let rowIndex = guesses.length + 1;
         const currentGuessDisplay = document.getElementById("guess-row" + rowIndex);
         const charList = currentGuessDisplay.querySelectorAll(".guess-char");
         charList.forEach((charEle, index) => {
@@ -157,30 +155,34 @@ window.addEventListener("load", function () {
 
     }
 
-    let guesses = []; // 存储玩家猜测的数组
+
     function submitGuess() {
+
         validateGuess(currentGuess).then(isValid => {
+
             if (isValid) {
                 console.log('Valid guess:', currentGuess.join(''));
-                guesses.push(currentGuess);
-                currentGuess = '';
-
+                displayGuess(currentGuess);
+                currentGuess = [];
             } else {
                 shakeAnimation();
             }
+
         });
     }
 
     async function validateGuess(guess) {
-        const guessString = guess.join('');
+        let guessCopy = guess.slice();
+        const guessString = guessCopy.join('');
+
         try {
             const response = await fetch(`https://words.trex-sandwich.com/${guessString}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            console.log("A", guess);
             const data = await response.json();
             console.log('Response data:', data); // 用于调试
+
             return data.valid;
         } catch (error) {
             console.error('Error fetching word validation:', error);
@@ -190,7 +192,7 @@ window.addEventListener("load", function () {
 
     function shakeAnimation() {
         const guessArea = document.querySelector('#guess-row1'); // 替换为您的猜测显示区域的选择器
-        console.log(guessArea);
+        // console.log(guessArea);
         guessArea.classList.add('shake-animation');
 
         // 动画完成后移除类，以便将来可以再次触发动画
@@ -198,6 +200,39 @@ window.addEventListener("load", function () {
             guessArea.classList.remove('shake-animation');
         }, 300); // 500毫秒是动画持续时间
     }
+
+
+    function displayGuess(guess) {
+        console.log(guess);
+        console.log(guesses);
+        let index = guesses.length - 1;
+        console.log(index);
+        let rows = document.getElementsByClassName("guess-row");
+        let row = rows[index];
+        let chars = row.getElementsByClassName("guess-char");
+        let guessCopy = guess.slice();
+        for (let i = 0; i < chars.length; i++) {
+            let char = chars[i];
+            char.classList.add(getLetterClass(guessCopy[i], i));
+        }
+
+        // updateKeyboardKeyColor();
+
+    }
+
+
+    function getLetterClass(letter, index) {
+        if (targetWord[index] === letter) {
+            return 'correct-letter'; // 字母正确且位置正确
+        } else if (targetWord.includes(letter)) {
+            return 'present-letter'; // 字母正确但位置不正确
+        } else {
+            return 'absent-letter'; // 字母不在目标单词中
+        }
+    }
+
+
+
 
 
 })

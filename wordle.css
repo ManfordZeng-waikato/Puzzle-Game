@@ -56,3 +56,15 @@ button {
 .shake-animation {
     animation: shake 0.5s ease-in-out;
 }
+
+.correct-letter {
+    background-color: green;
+}
+
+.present-letter {
+    background-color: orange;
+}
+
+.absent-letter {
+    background-color: grey;
+}
