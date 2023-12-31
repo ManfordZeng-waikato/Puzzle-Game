@@ -48,7 +48,8 @@ window.addEventListener("load", function () {
             addVisualIndication(correspondingVirtualKey);
         }
 
-        if ((key >= 'A' && key <= 'Z') || key === 'ENTER' || key === 'BACKSPACE' || key === 'ESCAPE') {
+        if ((key.length == 1 && key >= 'A' && key <= 'Z') || key === 'ENTER' || key === 'BACKSPACE' || key === 'ESCAPE') {
+            console.log("key", event)
             handleKey(key);
         }
     });
