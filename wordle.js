@@ -215,7 +215,7 @@ window.addEventListener("load", function () {
             char.classList.add(getLetterClass(guessCopy[i], i));
         }
 
-        // updateKeyboardKeyColor();
+        updateKeyboardKeyColor();
 
     }
 
@@ -230,6 +230,30 @@ window.addEventListener("load", function () {
         }
     }
 
+    function updateKeyboardKeyColor() {
+        const elementsToUpdate = [];
+
+        for (let i = 0; i < currentGuess.length; i++) {
+            const className = getLetterClass(currentGuess[i], i);
+            const char = currentGuess[i];
+            const keyElement = document.querySelector(`[data-key="${char.toLowerCase()}"]`);
+
+            if (keyElement != null) {
+                elementsToUpdate.push({
+                    keyElement,
+                    className
+                });
+            }
+        }
+
+        elementsToUpdate.forEach(({
+            keyElement,
+            className
+        }) => {
+            keyElement.classList.remove('correct-letter', 'present-letter', 'absent-letter');
+            keyElement.classList.add(className);
+        });
+    }
 
 
 
