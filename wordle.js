@@ -13,8 +13,6 @@ window.addEventListener("load", function () {
         } else if (key === 'ENTER') {
             submitGuess();
 
-            guesses.push(currentGuess);
-            currentGuess = [];
             console.log("Enter pressed");
         } else if (key === 'NEW GAME') {
             console.log("New Game pressed");
@@ -159,13 +157,13 @@ window.addEventListener("load", function () {
     function submitGuess() {
 
         validateGuess(currentGuess).then(isValid => {
-
             if (isValid) {
                 console.log('Valid guess:', currentGuess.join(''));
+                guesses.push(currentGuess);
                 displayGuess(currentGuess);
                 currentGuess = [];
             } else {
-                shakeAnimation();
+                shakeAnimation(guesses.length + 1);
             }
 
         });
@@ -190,8 +188,9 @@ window.addEventListener("load", function () {
         }
     }
 
-    function shakeAnimation() {
-        const guessArea = document.querySelector('#guess-row1'); // 替换为您的猜测显示区域的选择器
+    function shakeAnimation(row) {
+
+        const guessArea = document.querySelector("#guess-row" + row); // 替换为您的猜测显示区域的选择器
         // console.log(guessArea);
         guessArea.classList.add('shake-animation');
 
@@ -203,7 +202,7 @@ window.addEventListener("load", function () {
 
 
     function displayGuess(guess) {
-        console.log(guess);
+        // console.log(guess);
         console.log(guesses);
         let index = guesses.length - 1;
         console.log(index);
