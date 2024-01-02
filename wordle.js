@@ -15,6 +15,7 @@ window.addEventListener("load", function () {
 
             console.log("Enter pressed");
         } else if (key === 'NEW GAME') {
+            newGameWhenClick();
             console.log("New Game pressed");
         } else if (currentGuess.length < 6 && (key >= 'A' && key <= 'Z')) {
             // 添加字符到当前猜测
@@ -159,8 +160,11 @@ window.addEventListener("load", function () {
         validateGuess(currentGuess).then(isValid => {
             if (isValid) {
                 console.log('Valid guess:', currentGuess.join(''));
+
                 guesses.push(currentGuess);
                 displayGuess(currentGuess);
+                endGame(currentGuess);
+
                 currentGuess = [];
             } else {
                 shakeAnimation(guesses.length + 1);
@@ -255,7 +259,61 @@ window.addEventListener("load", function () {
         });
     }
 
+    function newGameWhenClick() {
+        const ifStartNewGame = confirm("Would you want to star a new game?");
+        if (ifStartNewGame) {
+            resetGame()
+        } else {
+
+        }
+    }
+
+    function resetGame() {
+        targetWord = '';
+        currentGuess = [];
+        guesses = [];
+
+        const keys = document.querySelectorAll('.keyboard');
+        keys.forEach(key => {
+            key.classList.remove('correct-letter', 'present-letter', 'absent-letter');
+            key.style.backgroundColor = "";
+
+        })
 
 
+        const chars = document.querySelectorAll('.guess-char');
+        chars.forEach(char => {
+            char.textContent = '';
+            char.classList.remove('correct-letter', 'present-letter', 'absent-letter');
+        })
 
+        getTargetWord();
+    }
+
+    function endGame(guess) {
+        const guessString = guess.join('');
+        if (guessString == targetWord) {
+            alert("Congratulations! YOU WIN");
+        } else if (guesses.length == 6) {
+            alert("Game over! correct answer is " + targetWord);
+        } else {
+            return;
+        }
+        // 游戏结束后提示开始新游戏
+        newGameWhenGuessIsRight();
+    }
+
+    function newGameWhenGuessIsRight() {
+        const ifStartNewGame = confirm("Would you want to star a new game?");
+        if (ifStartNewGame) {
+            resetGame()
+        } else {
+            const keys = document.querySelectorAll('.keyboard');
+            keys.forEach(key => {
+                key.disabled = true;
+                key.classList.add('disabled');
+            })
+
+        }
+    }
 })
